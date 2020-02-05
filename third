@@ -1,0 +1,37 @@
+import re
+
+regexp = r'.{1,8}-.{1,4}-.{1,4}-.{1,4}-.{1,12}'
+last = r'.{1}$'
+phys_lessons = []
+with open('lessons.txt', 'r') as f:
+    lessons = f.readlines()[2:]
+    for i in lessons:
+        if 'phys' in i:
+            phys_lessons.append(i)
+
+phys_lessons_sort = [re.findall(regexp, i) for i in phys_lessons]
+
+
+with open('quality.txt', 'r') as f:
+    quality = f.readlines()[2:]
+
+quality_ids = [re.findall(regexp, i) for i in quality]
+quality_score = [re.findall(last, i) for i in quality]
+
+quality_common = [i for i in zip(quality_ids,quality_score)]
+
+
+final = []
+
+for i in phys_lessons_sort:
+    for j in quality_common:
+        if i == j[0]:
+            final.append(i)
+
+result = []
+
+for i in quality_common:
+    for j in final:
+        if i[0] == j:
+            result.append(i)
+print(result)
